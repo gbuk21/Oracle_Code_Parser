@@ -1,4 +1,4 @@
-# Oracle_Code_Parser
+# Oracle Code Parser
 
 Oracle query parser
 This article will show how to parse Oracle queries and report all the modules and queries that utilize a given table. It will also how to report implicit references by parsing the where clauses in a query. The intent is to create a reference database for Oracle SQL code analysis.
