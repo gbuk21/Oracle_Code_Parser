@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 8px;
+  padding: 1px 1px 1px 1px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 12px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 1px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+th {
+  background-color: #04AA6D;
+  color: white;
+}
+tr:nth-child(even) {background-color: #f2f2f2;}
+</style>
+</head>
+<body>
+
+<h2>Columns</h2>
+
+<table id="columns">
+<!-- here goes our data! -->
+</table>
+
+<h2>joins to other tables</h2>
+
+<table id="joins">
+<!-- here goes our data! -->
+</table>
+
+<h2>Modules that insert</h2>
+
+<table id="insert_modules">
+<!-- here goes our data! -->
+</table>
+
+<h2>Modules that update</h2>
+
+<table id="update_modules">
+<!-- here goes our data! -->
+</table>
+
+<h2>Modules that delete</h2>
+
+<table id="delete_modules">
+<!-- here goes our data! -->
+</table>
+
+<h2>Modules that create</h2>
+
+<table id="create_modules">
+<!-- here goes our data! -->
+</table>
+
+<h2>Modules that drop</h2>
+
+<table id="drop_modules">
+<!-- here goes our data! -->
+</table>
+
+<h2>Modules that select</h2>
+
+<table id="select_modules">
+<!-- here goes our data! -->
+</table>
+
+<h2>Columns used in where clause</h2>
+
+<table id="where_clauses">
+<!-- here goes our data! -->
+</table>
+
+<script type="text/javascript">
+var columns={{column_names|tojson}};
+var join_column={{join_columns|tojson}};
+
+var insert_module={{insert_modules|tojson}};
+var update_module={{update_modules|tojson}};
+var delete_module={{delete_modules|tojson}};
+var select_module={{select_modules|tojson}};
+var create_module={{create_modules|tojson}};
+var drop_module={{drop_modules|tojson}};
+var where_clause={{where_clauses|tojson}};
+
+
+function generateTableHead(table, data) {
+  let thead = table.createTHead();
+  let row = thead.insertRow();
+  for (let key of data) {
+    let th = document.createElement("th");
+    let text = document.createTextNode(key);
+    th.appendChild(text);
+    row.appendChild(th);
+  }
+}
+
+function generateTable(table, data) {
+  for (let element of data) {
+    var row = table.insertRow();
+    for (key in element) {
+      var cell = row.insertCell();
+      if (key.toUpperCase()=="SQL_ID") {
+         newlink = document.createElement('a');
+         newlink.setAttribute('href', 'http://127.0.0.1:5000/get_query_data/'+element[key]);
+         newlink.setAttribute('target', '_blank');
+         text = document.createTextNode(element[key]);
+         newlink.appendChild(text);
+         cell.appendChild(newlink);
+      } else if (key.toUpperCase()=="MODULE") {
+         newlink = document.createElement('a');
+         newlink.setAttribute('href', 'http://127.0.0.1:5000/get_module_data/'+element[key]);
+         newlink.setAttribute('target', '_blank');
+         text = document.createTextNode(element[key]);
+         newlink.appendChild(text);
+         cell.appendChild(newlink);
+      } else if (key.toUpperCase()=="TABLE_NAME" || key.toUpperCase()=="LEFT_TABLE" || key.toUpperCase()=="RIGHT_TABLE") {
+         newlink = document.createElement('a');
+         newlink.setAttribute('href', 'http://127.0.0.1:5000/get_table_data/'+element[key]);
+         newlink.setAttribute('target', '_blank');
+         text = document.createTextNode(element[key]);
+         newlink.appendChild(text);
+         cell.appendChild(newlink);
+      }
+      else {
+         var text = document.createTextNode(element[key]);
+         cell.appendChild(text);
+      }
+      }
+  }
+}
+
+if (columns.length >0) {
+let table = document.getElementById('columns');
+let data = Object.keys(columns[0]);
+generateTableHead(table, data);
+generateTable(table, columns);
+}
+
+if (join_column.length >0) {
+   let table_join = document.getElementById('joins');
+   let data_join = Object.keys(join_column[0]);
+   generateTableHead(table_join, data_join);
+   generateTable(table_join, join_column);
+}
+
+if (insert_module.length>0){
+   let table1 = document.getElementById("insert_modules");
+   let data1 = Object.keys(insert_module[0]);
+   generateTableHead(table1, data1);
+   generateTable(table1, insert_module);
+}
+
+
+if (delete_module.length>0){
+   let delete_table = document.getElementById("delete_modules");
+   let delete_data = Object.keys(delete_module[0]);
+   generateTableHead(delete_table, delete_data);
+   generateTable(delete_table, delete_module);
+}
+
+if (update_module.length>0){
+   let update_table = document.getElementById("update_modules");
+   let update_data = Object.keys(update_module[0]);
+   generateTableHead(update_table, update_data);
+   generateTable(update_table, update_module);
+}
+
+if (select_module.length>0){
+   let select_table = document.getElementById("select_modules");
+   let select_data = Object.keys(select_module[0]);
+   generateTableHead(select_table, select_data);
+   generateTable(select_table, select_module);
+}
+
+if (create_module.length>0){
+   let create_table = document.getElementById("create_modules");
+   let create_data = Object.keys(create_module[0]);
+   generateTableHead(create_table, create_data);
+   generateTable(create_table, create_module);
+}
+
+if (drop_module.length>0){
+   let drop_table = document.getElementById("drop_modules");
+   let drop_data = Object.keys(drop_module[0]);
+   generateTableHead(drop_table, drop_data);
+   generateTable(drop_table, drop_module);
+}
+
+if (where_clause.length>0){
+   let where_table = document.getElementById("where_clauses");
+   let where_data = Object.keys(where_clause[0]);
+   generateTableHead(where_table, where_data);
+   generateTable(where_table, where_clause);
+}
+</script>
+</body>
+</html>
