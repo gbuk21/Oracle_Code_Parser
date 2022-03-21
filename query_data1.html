@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 8px;
+  padding: 1px 1px 1px 1px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 12px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 1px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+th {
+  background-color: #04AA6D;
+  color: white;
+}
+tr:nth-child(even) {background-color: #f2f2f2;}
+</style>
+</head>
+<body>
+
+<h2>query</h2>
+
+<table id="query">
+<!-- here goes our data! -->
+</table>
+
+
+
+<script type="text/javascript">
+var query={{query|tojson}};
+alert(query)
+
+function generateTableHead(table, data) {
+  let thead = table.createTHead();
+  let row = thead.insertRow();
+  for (let key of data) {
+    let th = document.createElement("th");
+    let text = document.createTextNode(key);
+    th.appendChild(text);
+    row.appendChild(th);
+  }
+}
+
+function generateTable(table, data) {
+  for (let element of data) {
+    var row = table.insertRow();
+    for (key in element) {
+      var cell = row.insertCell();
+      if (key=="SQL_ID") {
+         newlink = document.createElement('a');
+         newlink.setAttribute('href', 'http://127.0.0.1:5000/get_query_data/'+element[key]);
+         newlink.setAttribute('target', '_blank');
+         text = document.createTextNode(element[key]);
+         newlink.appendChild(text);
+         cell.appendChild(newlink);
+      }
+      else if (key=="MODULE") {
+         newlink = document.createElement('a');
+         newlink.setAttribute('href', 'http://127.0.0.1:5000/get_module_data/'+element[key]);
+         newlink.setAttribute('target', '_blank');
+         text = document.createTextNode(element[key]);
+         newlink.appendChild(text);
+         cell.appendChild(newlink);
+      }
+      else {
+         var text = document.createTextNode(element[key]);
+         cell.appendChild(text);
+      }
+      }
+  }
+}
+
+let table = document.getElementById('query');
+let data = Object.keys(query[0]);
+generateTableHead(table, data);
+generateTable(table, query);
+
+
+</script>
+</body>
+</html>
