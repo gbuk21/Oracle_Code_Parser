@@ -21,7 +21,6 @@ def get_where_clauses(conn , table_name,module ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module) like '%"+module.upper()+"%' "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall())
@@ -33,7 +32,6 @@ def get_select_clauses(conn, table_name,module  ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module) like  '%"+module.upper()+"%'"
-    query=query+"  limit 1"
     print(query)   
     
     cursor = conn.execute(query)  
@@ -46,7 +44,6 @@ def get_create_clauses(conn, table_name,module  ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module)like '%"+module.upper()+"%' "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall())
@@ -58,7 +55,6 @@ def get_drop_clauses(conn, table_name,module  ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module) like'%"+module.upper()+"%' "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall())
@@ -70,7 +66,6 @@ def get_update_clauses(conn, table_name,module  ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module) like '%"+module.upper()+"%' "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall()) 
@@ -83,7 +78,6 @@ def get_delete_clauses(conn, table_name,module  ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module) like '%"+module.upper()+"%'  "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall()) 
@@ -96,7 +90,6 @@ def get_insert_clauses(conn, table_name,module  ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if module.strip()!='':    
        query=query+" and upper(module)like '%"+module.upper()+"%'  "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall()) 
@@ -104,13 +97,13 @@ def get_insert_clauses(conn, table_name,module  ):
 def get_implicit_dependencies(conn, table_name  ):
     conn.row_factory = dict_factory
     print("select left_table, left_column, right_table, right_column from implicit_dependencies where upper(left_table)='"+table_name.upper()+"' or upper(right_table)='"+table_name.upper()+"'")
-    cursor = conn.execute("select left_table, left_column, right_table, right_column from implicit_dependencies where upper(left_table)='"+table_name.upper()+"' or upper(right_table)='"+table_name.upper()+"' limit 1" )
+    cursor = conn.execute("select left_table, left_column, right_table, right_column from implicit_dependencies where upper(left_table)='"+table_name.upper()+"' or upper(right_table)='"+table_name.upper()+"' " )
     return(cursor.fetchall())  
     
 def get_all_tables(conn  ):
     conn.row_factory = dict_factory
     print("select distinct table_name from dba_tab_columns")
-    cursor = conn.execute("select distinct table_name from dba_tab_columns  limit 1")    
+    cursor = conn.execute("select distinct table_name from dba_tab_columns  ")    
     return(cursor.fetchall())
 
 def get_table_columns(conn, table_name, table_comment ):
@@ -121,7 +114,6 @@ def get_table_columns(conn, table_name, table_comment ):
        query=query+" and upper(table_name)='"+table_name.upper()+"'"
     if table_comment.strip()!='':    
        query=query+" and upper(comments) like '%"+table_comment.upper()+"%'  "
-    query=query+"  limit 1"
     print(query)   
     cursor = conn.execute(query)  
     return(cursor.fetchall())
@@ -129,11 +121,11 @@ def get_table_columns(conn, table_name, table_comment ):
 def get_query_data(conn, query_id ):
     conn.row_factory = dict_factory
     print("select distinct * from dg_gv_sql_snapshot where upper(SQL_ID)='"+query_id.upper()+"'")  
-    cursor = conn.execute("select distinct * from dg_gv_sql_snapshot where upper(SQL_ID)='"+query_id.upper()+"'  limit 1")     
+    cursor = conn.execute("select distinct * from dg_gv_sql_snapshot where upper(SQL_ID)='"+query_id.upper()+"'  ")     
     return(cursor.fetchall()) 
     
 def get_module_data(conn, module ):
     conn.row_factory = dict_factory
     print("select distinct * from dg_gv_sql_snapshot where upper(module)='"+module.upper()+"'")  
-    cursor = conn.execute("select distinct * from dg_gv_sql_snapshot where upper(module)='"+module.upper()+"'  limit 1")     
+    cursor = conn.execute("select distinct * from dg_gv_sql_snapshot where upper(module)='"+module.upper()+"'  ")     
     return(cursor.fetchall())
