@@ -63,8 +63,8 @@ if 1==1:
    except:
         pass
 
-   #sql_text1  = "select dbms_lob.substr(sql_fulltext,3999,1)   sql_text, sql_id from dg_gv_sql_snapshot"
-   sql_text1  = "select   distinct sql_text, sql_id, module, service from dg_gv_sql_snapshot where upper(sql_texT) not like 'BEGIN%' and upper(sql_text) not like 'DECLARE%' and  upper(sql_text) not like 'LOCK%' and upper(sql_text) not like 'CREATE%' and sql_text not like '%chartorowid%' and sql_text not like '%xmlindex_sel_idx_tbl%' and sql_text not like '%OPT_DYN_SAMP%' and sql_text not like '%SYS.PARTOBJ%' and upper(sql_text) like '%STOMVT%' "
+   
+   sql_text1  = "select   distinct sql_text, sql_id, module, service from gv$sql where upper(sql_texT) not like 'BEGIN%' and upper(sql_text) not like 'DECLARE%' and  upper(sql_text) not like 'LOCK%' and upper(sql_text) not like 'CREATE%' and sql_text not like '%chartorowid%' and sql_text not like '%xmlindex_sel_idx_tbl%' and sql_text not like '%OPT_DYN_SAMP%' and sql_text not like '%SYS.PARTOBJ%' and upper(sql_text) like '%STOMVT%' "
    df_dba_tab_columns=pd.read_sql(sql_text1, con=conn)
    table1="dg_gv_sql_snapshot"
    df_dba_tab_columns.to_sql(table1,  conn1,   if_exists='replace')
